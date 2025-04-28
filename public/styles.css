@@ -1,0 +1,9 @@
+:root {
+    --bs-primary: #3b118d; /* cor da marca Wechsel */
+  }
+  
+  /* opcional: centraliza imagens responsivas */
+  img {
+    max-width: 100%;
+    height: auto;
+  }

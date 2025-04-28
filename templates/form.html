@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ativo {{ idx+1 }} / {{ total }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="container-fluid p-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{{ url_for('restart') }}" class="btn btn-outline-secondary">Reiniciar</a>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Wechsel Logo"
+         style="height:40px;">
+  </div>
+
+  <h5 class="mb-4">Prédio: <strong>{{ predio }}</strong></h5>
+  <h6 class="mb-3">Ativo {{ idx+1 }} de {{ total }}</h6>
+
+  <form method="post" class="row g-3">
+    <!-- somente-leitura -->
+    {% for key in readonly %}
+      <div class="col-12">
+        <label class="form-label">{{ key }}</label>
+        <input class="form-control" value="{{ record[key] }}" readonly>
+      </div>
+    {% endfor %}
+
+    <!-- editáveis -->
+    {% for key in editable %}
+      {% set field = key.lower()
+                      .replace(' ', '_')
+                      .replace('/', '_')
+                      .replace('(', '')
+                      .replace(')', '')
+                      .replace('?', '') %}
+      <div class="col-12 col-md-6">
+        <label class="form-label">{{ key }}</label>
+        <input name="{{ field }}"
+               class="form-control"
+               value="{{ record[key] or '' }}"
+               required>
+      </div>
+    {% endfor %}
+
+    <div class="col-12 d-flex justify-content-between mt-4">
+      <button name="prev" type="submit" class="btn btn-secondary"
+              {% if idx==0 %}disabled{% endif %}>
+        Anterior
+      </button>
+      <button name="next" type="submit" class="btn btn-primary">
+        Próximo
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-4 text-center">
+    <a href="{{ url_for('download') }}" class="btn btn-success">Baixar planilha</a>
+  </div>
+</body>
+</html>
